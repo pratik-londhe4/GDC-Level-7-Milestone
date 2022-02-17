@@ -84,12 +84,7 @@ class HistoryFilter(FilterSet):
     new_status = ChoiceFilter(choices=STATUS_CHOICES)
 
 
-class TaskHistoryApiViewset(
-    mixins.DestroyModelMixin,
-    mixins.RetrieveModelMixin,
-    mixins.ListModelMixin,
-    GenericViewSet,
-):
+class TaskHistoryApiViewset(ModelViewSet):
     permission_classes = (IsAuthenticated,)
     serializer_class = HistorySerializer
 
