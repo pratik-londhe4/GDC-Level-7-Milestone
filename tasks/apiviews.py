@@ -13,17 +13,14 @@ from django.contrib.auth.models import User
 
 from tasks.models import Task, History
 
-from rest_framework.views import APIView
-from rest_framework.response import Response
 
 from rest_framework.serializers import ModelSerializer
 
-from rest_framework.viewsets import ModelViewSet
+from rest_framework.viewsets import ModelViewSet, ReadOnlyModelViewSet
 
 from rest_framework.permissions import IsAuthenticated
 
 from rest_framework import mixins
-from rest_framework.viewsets import GenericViewSet
 
 
 class UserSerializer(ModelSerializer):
@@ -84,7 +81,7 @@ class HistoryFilter(FilterSet):
     new_status = ChoiceFilter(choices=STATUS_CHOICES)
 
 
-class TaskHistoryApiViewset(ModelViewSet):
+class TaskHistoryApiViewset(ReadOnlyModelViewSet):
     permission_classes = (IsAuthenticated,)
     serializer_class = HistorySerializer
 
