@@ -1,6 +1,4 @@
 
-from curses import use_default_colors
-from distutils.log import Log
 from django_filters.rest_framework import (
     DjangoFilterBackend,
     FilterSet,
@@ -72,6 +70,7 @@ class TaskApiViewSet(ModelViewSet):
 
 
 class HistorySerializer(ModelSerializer):
+
     class Meta:
         model = History
         fields = "__all__"
@@ -92,4 +91,4 @@ class TaskHistoryApiViewset(ReadOnlyModelViewSet):
     filterset_class = HistoryFilter
 
     def get_queryset(self):
-        return History.objects.filter(user=self.request.user)
+        return History.objects.filter(task__in=Task.objects.filter(user=self.request.user))
