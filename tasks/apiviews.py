@@ -1,4 +1,5 @@
 
+from curses import use_default_colors
 from distutils.log import Log
 from django_filters.rest_framework import (
     DjangoFilterBackend,
@@ -11,7 +12,6 @@ from django_filters.rest_framework import (
     DateTimeFilter,
 )
 from django.contrib.auth.models import User
-from django.contrib.auth.mixins import LoginRequiredMixin
 
 
 from tasks.models import Task, History
@@ -55,7 +55,7 @@ class TaskFilter(FilterSet):
     created_date = DateTimeFilter()
 
 
-class TaskApiViewSet(LoginRequiredMixin, ModelViewSet):
+class TaskApiViewSet(ModelViewSet):
     queryset = Task.objects.all()
     serializer_class = TaskSerializer
 
@@ -77,7 +77,7 @@ class HistorySerializer(ModelSerializer):
         fields = "__all__"
 
 
-class HistoryFilter(LoginRequiredMixin,  FilterSet):
+class HistoryFilter(FilterSet):
     task = ModelChoiceFilter(queryset=Task.objects.filter(deleted=False))
     timestamp = DateFromToRangeFilter()
     old_status = ChoiceFilter(choices=STATUS_CHOICES)
@@ -92,4 +92,4 @@ class TaskHistoryApiViewset(ReadOnlyModelViewSet):
     filterset_class = HistoryFilter
 
     def get_queryset(self):
-        return History.objects.all()
+        return History.objects.filter(user=self.request.user)
