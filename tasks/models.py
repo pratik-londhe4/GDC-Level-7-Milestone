@@ -42,7 +42,12 @@ class History(models.Model):
 def task_update_trigger(sender, instance, **kwargs):
     new_task = instance
     id = new_task.id
-    old_task = Task.objects.get(pk=id)
-    if(new_task.status != old_task.status):
-        History.objects.create(
-            task=instance, old_status=old_task.status, new_status=new_task.status)
+    try:
+
+        old_task = Task.objects.get(pk=id)
+        if(new_task.status != old_task.status):
+            History.objects.create(
+                task=instance, old_status=old_task.status, new_status=new_task.status)
+
+    except:
+        print("no task found")
