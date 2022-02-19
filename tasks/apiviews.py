@@ -91,4 +91,4 @@ class TaskHistoryApiViewset(ReadOnlyModelViewSet):
     filterset_class = HistoryFilter
 
     def get_queryset(self):
-        return History.objects.filter(task__in=Task.objects.filter(user=self.request.user))
+        return History.objects.filter(task__user=self.request.user)
